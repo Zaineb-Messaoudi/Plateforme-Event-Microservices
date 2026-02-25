@@ -1,0 +1,24 @@
+2026-02-13 19:50:50.131218+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BLOG_POST" not found (this database is empty); SQL statement:
+insert into blog_post (author,content,title,id) values (?,?,?,default) [42104-232]
+2026-02-13 19:51:47.614618+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BLOG_POST" not found (this database is empty); SQL statement:
+insert into blog_post (author,content,created_at,title,id) values (?,?,?,?,default) [42104-232]
+2026-02-13 19:52:35.956644+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BLOG_POST" not found (this database is empty); SQL statement:
+insert into blog_post (author,content,created_at,title,id) values (?,?,?,?,default) [42104-232]
+2026-02-13 19:53:52.028671+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BLOG_POST" not found (this database is empty); SQL statement:
+insert into blog_post (author,content,title,id) values (?,?,?,default) [42104-232]
+2026-02-14 00:49:37.922900+01:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "SELECT * FROM BLOG_POST COMMENT [*]CATEGORY CATEGORY CATEGORY"
+Syntax error in SQL statement "SELECT * FROM BLOG_POST COMMENT [*]CATEGORY CATEGORY CATEGORY"; SQL statement:
+SELECT * FROM BLOG_POST COMMENT CATEGORY CATEGORY CATEGORY [42000-232]
+2026-02-14 00:49:47.988927+01:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "SELECT * FROM BLOG_POST COMMENT [*]CATEGORY CATEGORY CATEGORY CATEGORY"
+Syntax error in SQL statement "SELECT * FROM BLOG_POST COMMENT [*]CATEGORY CATEGORY CATEGORY CATEGORY"; SQL statement:
+SELECT * FROM BLOG_POST COMMENT CATEGORY CATEGORY CATEGORY CATEGORY [42000-232]
+2026-02-14 00:53:04.153366+01:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "[*]CATEGORY"; attendu "COMMIT, CREATE, CALL, CHECKPOINT, COMMENT"
+Syntax error in SQL statement "[*]CATEGORY"; expected "COMMIT, CREATE, CALL, CHECKPOINT, COMMENT"; SQL statement:
+CATEGORY [42001-232]

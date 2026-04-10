@@ -1,0 +1,84 @@
+version: '3.9'
+
+services:
+
+  # ─────────────────────────────────────────────
+  # 1. RabbitMQ (broker de messages)
+  # ─────────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"       # protocole AMQP
+      - "15672:15672"     # interface web admin
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────────
+  # 2. Eureka Server (Service Discovery)
+  # ─────────────────────────────────────────────
+  eureka-server:
+    build: ./eureka-server
+    image: logistics-group/eureka-server:1.0
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+
+  # ─────────────────────────────────────────────
+  # 3. Config Server (Configuration centralisée)
+  # ─────────────────────────────────────────────
+  config-server:
+    build: ./config-server
+    image: logistics-group/config-server:1.0
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+
+  # ─────────────────────────────────────────────
+  # 4. API Gateway
+  # ─────────────────────────────────────────────
+  api-gateway:
+    build: ./api-gateway
+    image: logistics-group/api-gateway:1.0
+    container_name: api-gateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      - eureka-server
+      - config-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+
+  # ─────────────────────────────────────────────
+  # 5. Logistics Service (votre microservice)
+  # ─────────────────────────────────────────────
+  logistics-service:
+    build: ./logistics-service
+    image: logistics-group/logistics-service:1.0
+    container_name: logistics-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+      - config-server
+      - rabbitmq
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest

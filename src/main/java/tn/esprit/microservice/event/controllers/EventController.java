@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.microservice.event.entities.Event;
+import tn.esprit.microservice.event.models.CategoryModel;
 import tn.esprit.microservice.event.services.iEventService;
 
 import javax.sql.DataSource;
@@ -82,6 +83,7 @@ public class EventController {
         existing.setCapacity(event.getCapacity());
         existing.setPrice(event.getPrice());
         existing.setPublished(event.isPublished());
+        existing.setCategoryId(event.getCategoryId());
         return ResponseEntity.ok(eventService.updateEvent(existing));
     }
 
@@ -90,9 +92,41 @@ public class EventController {
     public ResponseEntity<String> deleteEvent(@PathVariable Long id) {
         Event existing = eventService.getEventById(id);
         if (existing == null) {
-            return ResponseEntity.ok("event non supprimé");
+            return ResponseEntity.ok("Event not found");
         }
         eventService.deleteEvent(id);
-        return ResponseEntity.ok("event supprimé");
+        return ResponseEntity.ok("Event deleted successfully");
+    }
+
+    // ---- FEIGN ENDPOINTS ----
+
+    // GET ALL CATEGORIES FROM CATEGORY MICROSERVICE
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryModel>> getAllCategories() {
+        List<CategoryModel> categories = eventService.getAllCategories();
+        if (categories.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(categories);
+    }
+
+    // GET CATEGORY OF A SPECIFIC EVENT
+    @GetMapping("/{id}/get-category")
+    public ResponseEntity<CategoryModel> getCategoryByEventId(@PathVariable Long id) {
+        CategoryModel category = eventService.getCategoryByEventId(id);
+        if (category == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(category);
+    }
+
+    // GET ACTIVE CATEGORIES FROM CATEGORY MICROSERVICE
+    @GetMapping("/categories/active")
+    public ResponseEntity<List<CategoryModel>> getActiveCategories() {
+        List<CategoryModel> categories = eventService.getActiveCategories();
+        if (categories.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(categories);
     }
 }

@@ -27,4 +27,7 @@ public class Event {
     private double price;
 
     private boolean published;
+
+    // Link to Category microservice
+    private Long categoryId;
 }

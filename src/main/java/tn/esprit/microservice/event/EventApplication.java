@@ -5,12 +5,16 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import tn.esprit.microservice.event.Repository.EventRepository;
 import tn.esprit.microservice.event.entities.Event;
 
 import java.time.LocalDateTime;
 
 @SpringBootApplication
+@EnableDiscoveryClient
+@EnableFeignClients
 public class EventApplication {
 
     public static void main(String[] args) {
@@ -30,17 +34,17 @@ public class EventApplication {
                 repository.save(new Event(null, "Tech Conference", "Big IT event",
                         "Technology", "Tunis",
                         LocalDateTime.now(), LocalDateTime.now().plusDays(1),
-                        100, 50, true));
+                        100, 50.0, true, 1L));
 
                 repository.save(new Event(null, "Music Festival", "Live music event",
                         "Music", "Sousse",
                         LocalDateTime.now(), LocalDateTime.now().plusDays(2),
-                        300, 20, true));
+                        300, 20.0, true, 2L));
 
                 repository.save(new Event(null, "Startup Meetup", "Business networking",
                         "Business", "Sfax",
                         LocalDateTime.now(), LocalDateTime.now().plusHours(5),
-                        80, 0, false));
+                        80, 0.0, false, 3L));
             }
 
             // Display events in console

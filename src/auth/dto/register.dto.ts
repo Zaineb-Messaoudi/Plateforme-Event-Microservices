@@ -1,22 +1,23 @@
-// src/auth/dto/register.dto.ts
-import { IsEmail, IsString, MinLength, IsEnum } from 'class-validator';
-import { UserRole } from 'src/user/shema/user.schema';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsString } from 'class-validator';
 
 export class RegisterDto {
+  @ApiProperty({ example: 'test@gmail.com' })
   @IsEmail()
-  email: string;
+  email !: string;
 
+  @ApiProperty({ example: '12345678' })
   @IsString()
-  @MinLength(8)
-  password: string;
+  password !: string;
 
+  @ApiProperty({ example: 'John' })
   @IsString()
-  firstName: string;
+  firstName !: string;
 
+  @ApiProperty({ example: 'Doe' })
   @IsString()
-  lastName: string;
+  lastName !: string;
 
-  @IsEnum([UserRole.UTILISATEUR, UserRole.ORGANISATEUR])
-  role: UserRole.UTILISATEUR | UserRole.ORGANISATEUR;
-  // ADMIN role is never self-assigned — only promoted by another admin
+  @ApiProperty({ example: 'UTILISATEUR' })
+  role !: 'UTILISATEUR' | 'ORGANISATEUR';
 }

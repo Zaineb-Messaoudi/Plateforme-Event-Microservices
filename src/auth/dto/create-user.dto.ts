@@ -7,18 +7,18 @@ export enum UserRole {
 
 export class CreateUserDto {
   @IsEmail()
-  email: string;
+  email !: string;
 
   @IsNotEmpty()
   @MinLength(6)
-  password: string;
+  password !: string;
 
   @IsNotEmpty()
-  firstName: string;
+  firstName !: string;
 
   @IsNotEmpty()
-  lastName: string;
+  lastName !: string;
 
   @IsEnum(UserRole)
-  role: UserRole;
+  role !: UserRole;
 }

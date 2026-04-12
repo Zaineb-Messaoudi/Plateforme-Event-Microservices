@@ -1,4 +1,3 @@
-// src/users/schemas/user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -19,37 +18,36 @@ export enum UserStatus {
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true, unique: true })
-  keycloakId: string;   // links to Keycloak user ID
+  keycloakId!: string;
 
   @Prop({ required: true, unique: true })
-  email: string;
+  email!: string;
 
   @Prop({ required: true })
-  firstName: string;
+  firstName!: string;
 
   @Prop({ required: true })
-  lastName: string;
+  lastName!: string;
 
   @Prop({ type: String, enum: UserRole, default: UserRole.UTILISATEUR })
-  role: UserRole;
+  role!: UserRole;
 
   @Prop({ type: String, enum: UserStatus, default: UserStatus.ACTIVE })
-  status: UserStatus;
+  status!: UserStatus;
 
-  // Organisateur-specific fields
+  // Optional fields (for ORGANISATEUR)
   @Prop()
   organizationName?: string;
 
   @Prop()
   bio?: string;
 
-  // Subscription info (referenced by Subscription microservice)
+  // Subscription flag (future microservice)
   @Prop({ default: false })
-  hasPremium: boolean;
+  hasPremium!: boolean;
 
-  // Preferences
   @Prop({ type: [String], default: [] })
-  preferredCategories: string[];
+  preferredCategories!: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
